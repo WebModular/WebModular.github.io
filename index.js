@@ -30,6 +30,10 @@ class WebModular {
     document.documentElement.dataset.device = p.device;
   }
   style() {
+    const font = document.createElement('link');
+    font.rel = 'stylesheet';
+    font.href = 'https://fonts.googleapis.com/css2?family=Smooch+Sans:wght@400;500&display=swap';
+    document.head.append(font);
     const s = document.createElement('style');
     s.textContent = [
       ':root{color-scheme:dark;background:#151a22;font-family:system-ui,sans-serif}',
@@ -49,6 +53,8 @@ class WebModular {
       '.glass-button:focus-visible{outline:2px solid rgba(188,222,255,.9)}',
       '.glass-icon{display:block;width:29px;height:29px;object-fit:contain;pointer-events:none;transition:transform .3s ease,opacity .3s ease}',
       '.glass-button[aria-pressed="true"] .glass-icon{transform:scale(.88);opacity:.85}',
+      '.site-copyright{position:fixed;left:0;right:0;bottom:0;padding:0 16px max(12px,env(safe-area-inset-bottom));text-align:center;', 
+      'font-family:"Smooch Sans",sans-serif;font-size:20px;font-weight:400;letter-spacing:.015em;line-height:1.2;color:#fff;pointer-events:none}',
       '@media(prefers-reduced-motion:reduce){.glass-button{transition:none}}'
     ].join('');
     document.head.append(s);
@@ -72,7 +78,10 @@ class WebModular {
     button.append(icon);
     button.addEventListener('click', () => this.morph(button, icon));
     banner.append(button);
-    document.body.replaceChildren(banner);
+    const footer = document.createElement('footer');
+    footer.className = 'site-copyright';
+    footer.textContent = '© 2026 WebModular. All rights reserved.';
+    document.body.replaceChildren(banner, footer);
     v.banner = banner;
     v.button = button;
     this.registry.vector.icon = icon;
