@@ -32,9 +32,9 @@ class WebModular {
   style() {
     const s = document.createElement('style');
     s.textContent = [
-      ':root{color-scheme:dark;background:#07101e;font-family:system-ui,sans-serif}',
-      '*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07101e}',
-      'body{min-height:100dvh;background:radial-gradient(ellipse 90% 38% at 50% -25%,rgba(65,91,119,.14),transparent 100%),#07101e}',
+      ':root{color-scheme:dark;background:#151a22;font-family:system-ui,sans-serif}',
+      '*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#151a22}',
+      'body{min-height:100dvh;background:radial-gradient(ellipse 90% 38% at 50% -25%,rgba(118,125,138,.12),transparent 100%),#151a22}',
       '.glass-banner{position:relative;isolation:isolate;width:100%;height:36px;padding:0;display:flex;align-items:stretch;',
       'background:linear-gradient(to right,rgba(143,165,184,.13) 0%,rgba(108,131,154,.085) 28%,rgba(63,83,108,.025) 65%,transparent 100%);backdrop-filter:blur(14px) saturate(125%);-webkit-backdrop-filter:blur(14px) saturate(125%);',
       'border:0;box-shadow:none;overflow:hidden}',
