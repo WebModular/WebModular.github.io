@@ -41,14 +41,14 @@ class WebModular {
       '.glass-banner::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;',
       'background:linear-gradient(to top,rgba(155,176,196,.21) 0%,rgba(124,149,173,.115) 32%,rgba(80,105,132,.025) 74%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,rgba(0,0,0,.8) 26%,rgba(0,0,0,.25) 65%,transparent 100%);-webkit-mask-image:linear-gradient(to right,#000 0%,rgba(0,0,0,.8) 26%,rgba(0,0,0,.25) 65%,transparent 100%)}',
       '.glass-button{appearance:none;display:grid;place-items:center;width:36px;height:36px;flex:none;margin:0;padding:0;',
-      'border:0;border-radius:13px;background:linear-gradient(155deg,rgba(170,190,208,.26),rgba(105,127,149,.105));',
+      'border:0;border-radius:0;background:linear-gradient(155deg,rgba(170,190,208,.26),rgba(105,127,149,.105));',
       'box-shadow:inset 0 1px rgba(255,255,255,.10);color:#dcebf8;cursor:pointer;outline-offset:-3px;',
-      'transition:background .25s ease,transform .3s cubic-bezier(.2,.8,.2,1),border-radius .3s ease}',
+      'transition:background .25s ease,transform .3s cubic-bezier(.2,.8,.2,1)}',
       '.glass-button:hover{background:linear-gradient(155deg,rgba(174,203,226,.37),rgba(109,144,175,.17))}',
-      '.glass-button[aria-pressed="true"]{border-radius:17px;background:rgba(150,185,216,.23)}',
+      '.glass-button[aria-pressed="true"]{border-radius:0;background:rgba(150,185,216,.23)}',
       '.glass-button:focus-visible{outline:2px solid rgba(188,222,255,.9)}',
-      '.glass-icon{width:17px;height:17px;overflow:visible;opacity:.65}',
-      '.glass-icon path{stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}',
+      '.glass-icon{display:block;width:29px;height:29px;object-fit:contain;pointer-events:none;transition:transform .3s ease,opacity .3s ease}',
+      '.glass-button[aria-pressed="true"] .glass-icon{transform:scale(.88);opacity:.85}',
       '@media(prefers-reduced-motion:reduce){.glass-button{transition:none}}'
     ].join('');
     document.head.append(s);
@@ -62,33 +62,29 @@ class WebModular {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'glass-button';
-    button.setAttribute('aria-label', 'Toggle glass button');
+    button.setAttribute('aria-label', 'WebModular menu');
     button.setAttribute('aria-pressed', 'false');
-    const ns = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.classList.add('glass-icon');
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', 'M5 8H19 M5 12H19 M5 16H19');
-    svg.append(path);
-    button.append(svg);
-    button.addEventListener('click', () => this.morph(button, path, svg));
+    const icon = document.createElement('img');
+    icon.className = 'glass-icon';
+    icon.src = new URL('./favicon.png', document.baseURI).href;
+    icon.alt = '';
+    icon.draggable = false;
+    button.append(icon);
+    button.addEventListener('click', () => this.morph(button, icon));
     banner.append(button);
     document.body.replaceChildren(banner);
     v.banner = banner;
     v.button = button;
-    this.registry.vector.icon = svg;
+    this.registry.vector.icon = icon;
     this.registry.vector.calls++;
   }
-  morph(button, path, svg) {
+  morph(button, icon) {
     const state = this.registry.animation;
     state.calls++;
     state.active = !state.active;
     button.setAttribute('aria-pressed', String(state.active));
-    path.setAttribute('d', state.active ? 'M6 6L18 18 M12 12L12 12 M18 6L6 18' : 'M5 8H19 M5 12H19 M5 16H19');
-    if (!matchMedia('(prefers-reduced-motion:reduce)').matches && svg.animate) {
-      svg.animate([{transform:'scale(.72) rotate(-12deg)',opacity:.4},{transform:'scale(1) rotate(0deg)',opacity:.65}],{duration:260,easing:'cubic-bezier(.2,.8,.2,1)'});
+    if (!matchMedia('(prefers-reduced-motion:reduce)').matches && icon.animate) {
+      icon.animate([{transform:'scale(.72) rotate(-12deg)',opacity:.4},{transform:'scale(1) rotate(0deg)',opacity:.65}],{duration:260,easing:'cubic-bezier(.2,.8,.2,1)'});
     }
   }
   async startRuntimes() {
