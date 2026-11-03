@@ -53,9 +53,14 @@ class WebModular {
       '.glass-button:focus-visible{outline:2px solid rgba(188,222,255,.9)}',
       '.glass-icon{display:block;width:29px;height:29px;object-fit:contain;pointer-events:none;transition:transform .3s ease,opacity .3s ease}',
       '.glass-button[aria-pressed="true"] .glass-icon{transform:scale(.88);opacity:.85}',
+      '.text-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:100%;min-height:calc(100dvh - 36px);padding-bottom:48px}',
+      '.text-region{min-width:0;min-height:0;padding:clamp(16px,3vw,42px);border:0;background:transparent;display:flex;align-items:center;justify-content:center}',
+      '.text-loading{font-family:"Smooch Sans",sans-serif;color:rgba(227,234,241,.42);font-size:18px;letter-spacing:.055em;animation:text-breathe 2.4s ease-in-out infinite}',
+      '.text-region:nth-child(2) .text-loading{animation-delay:1.2s}',
+      '@keyframes text-breathe{0%,100%{opacity:.4}50%{opacity:1}}',
       '.site-copyright{position:fixed;left:0;right:0;bottom:0;padding:0 16px max(12px,env(safe-area-inset-bottom));text-align:center;', 
-      'font-family:"Smooch Sans",sans-serif;font-size:20px;font-weight:400;letter-spacing:.015em;line-height:1.2;color:#fff;pointer-events:none}',
-      '@media(prefers-reduced-motion:reduce){.glass-button{transition:none}}'
+      'font-family:"Smooch Sans",sans-serif;font-size:15px;font-weight:400;letter-spacing:.015em;line-height:1.2;color:#fff;pointer-events:none}',
+      '@media(prefers-reduced-motion:reduce){.glass-button{transition:none}.text-loading{animation:none}}'
     ].join('');
     document.head.append(s);
   }
@@ -81,7 +86,22 @@ class WebModular {
     const footer = document.createElement('footer');
     footer.className = 'site-copyright';
     footer.textContent = '© 2026 WebModular. All rights reserved.';
-    document.body.replaceChildren(banner, footer);
+    const workspace = document.createElement('main');
+    workspace.className = 'text-workspace';
+    workspace.setAttribute('aria-label', 'Two text content areas');
+    for (const side of ['left', 'right']) {
+      const area = document.createElement('section');
+      area.className = 'text-region';
+      area.dataset.side = side;
+      area.setAttribute('aria-label', side + ' text loading area');
+      const loading = document.createElement('span');
+      loading.className = 'text-loading';
+      loading.textContent = 'Loading…';
+      loading.setAttribute('role', 'status');
+      area.append(loading);
+      workspace.append(area);
+    }
+    document.body.replaceChildren(banner, workspace, footer);
     v.banner = banner;
     v.button = button;
     this.registry.vector.icon = icon;
